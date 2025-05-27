@@ -131,4 +131,28 @@ int main() {
     cout << "\nRoom " << room << " Price: ";
     printCurrency(price);
     cout << " Pesos\n";
-    
+    // Payment and change calculation
+    double payment = 0.0;
+    while (true) {
+        cout << "Enter payment amount: ";
+        cin >> payment;
+        if (cin.good() && payment >= price) {
+            break;
+        } else {
+            cout << "Insufficient payment or invalid input. Please enter an amount greater than or equal to the price.\n";
+            cin.clear();
+            cin.ignore(10000, '\n');
+        }
+    }
+    double change = payment - price;
+    cout << "\nUser Pays...\n";
+    system.displayBill();
+    cout << "Payment: ";
+    printCurrency(payment);
+    cout << " Pesos\n";
+    cout << "Change: ";
+    printCurrency(change);
+    cout << " Pesos\n";
+    cout << "\n--- End of Transaction ---\n";
+    return 0;
+}
