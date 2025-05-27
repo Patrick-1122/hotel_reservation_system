@@ -75,3 +75,60 @@ public:
     HotelReservationSystem& operator=(const HotelReservationSystem&) = delete;
 };
 
+int main() {
+    HotelReservationSystem system;
+    string roomChoice;
+    char room = ' ';
+    bool validRoomSelected = false;
+    cout << "Welcome to the Hotel Reservation System!\n";
+    while (!validRoomSelected) {
+        cout << "Select a room (A, B, C): ";
+        getline(cin, roomChoice);
+        if (roomChoice.size() == 1 && (roomChoice[0] == 'A' || roomChoice[0] == 'B' || roomChoice[0] == 'C')) {
+            room = roomChoice[0];
+            if (isRoomAvailable(room)) {
+                validRoomSelected = true;
+            } else {
+                cout << "Room " << room << " is not available.\n";
+                // Show available rooms and their prices
+                cout << "Available rooms:\n";
+                bool anyAvailable = false;
+                if (isRoomAvailable('A')) {
+                    cout << "  A - ";
+                    printCurrency(RoomAPriceStrategy().getPrice());
+                    cout << " Pesos\n";
+                    anyAvailable = true;
+                }
+                if (isRoomAvailable('B')) {
+                    cout << "  B - ";
+                    printCurrency(RoomBPriceStrategy().getPrice());
+                    cout << " Pesos\n";
+                    anyAvailable = true;
+                }
+                if (isRoomAvailable('C')) {
+                    cout << "  C - ";
+                    printCurrency(RoomCPriceStrategy().getPrice());
+                    cout << " Pesos\n";
+                    anyAvailable = true;
+                }
+                if (!anyAvailable) {
+                    cout << "No rooms available.\n";
+                    return 0;
+                }
+                // Let user pick again from available rooms
+                continue;
+            }
+        } else {
+            cout << "Invalid input. Please enter A, B, or C.\n";
+        }
+    }
+    RoomPriceStrategy* strategy = nullptr;
+    double price = 0.0;
+    if (room == 'A') { strategy = new RoomAPriceStrategy(); price = strategy->getPrice(); }
+    else if (room == 'B') { strategy = new RoomBPriceStrategy(); price = strategy->getPrice(); }
+    else if (room == 'C') { strategy = new RoomCPriceStrategy(); price = strategy->getPrice(); }
+    system.setRoomPriceStrategy(strategy, room);
+    cout << "\nRoom " << room << " Price: ";
+    printCurrency(price);
+    cout << " Pesos\n";
+    
