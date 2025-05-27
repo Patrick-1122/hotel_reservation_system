@@ -47,3 +47,31 @@ bool isRoomAvailable(char room) {
     return false;
 }
 
+class HotelReservationSystem {
+private:
+    RoomPriceStrategy* priceStrategy;
+    char selectedRoom;
+public:
+    HotelReservationSystem() : priceStrategy(nullptr), selectedRoom(' ') {}
+    void setRoomPriceStrategy(RoomPriceStrategy* strategy, char room) {
+        delete priceStrategy;
+        priceStrategy = strategy;
+        selectedRoom = room;
+    }
+    void displayBill() const {
+        if (!priceStrategy) {
+            cout << "Error: No room selected.\n";
+            return;
+        }
+        double price = priceStrategy->getPrice();
+        cout << "\n--- Receipt ---\n";
+        cout << "Room " << selectedRoom << " Price: ";
+        printCurrency(price);
+        cout << " Pesos\n";
+        cout << "Thank you for your payment!\n";
+    }
+    ~HotelReservationSystem() { delete priceStrategy; }
+    HotelReservationSystem(const HotelReservationSystem&) = delete;
+    HotelReservationSystem& operator=(const HotelReservationSystem&) = delete;
+};
+
